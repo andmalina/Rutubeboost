@@ -1,0 +1,21 @@
+{
+  "name": "rutube-boost",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rutube Boost — живое продвижение видео на Rutube. 1 своё через 3 чужих.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "ws": "^8.18.1"
+  }
+}
