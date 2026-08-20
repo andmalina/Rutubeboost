@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rutube Boost — живое продвижение видео</title>
+    <meta
+      name="description"
+      content="Rutube Boost: живые люди смотрят от 20 секунд, ставят лайки, пишут комментарии и подписываются. 1 своё видео через 3 чужих. Ссылка на rutube.ru."
+    />
+    <meta property="og:title" content="Rutube Boost" />
+    <meta
+      property="og:description"
+      content="Живое продвижение видео на Rutube. Смотри, лайкай, комментируй — и выходи в эфир."
+    />
+    <meta property="og:image" content="/img/hero-poster.png" />
+    <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/img/hero-poster.png" as="image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <noscript>
+      <p style="padding:24px;font-family:sans-serif;color:#f3eadb">
+        Включи JavaScript, чтобы войти в студию Rutube Boost.
+      </p>
+    </noscript>
+    <div class="noise" aria-hidden="true"></div>
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+
+    <section id="landing" class="landing" hidden>
+      <header class="land-top">
+        <div class="brand-lock">
+          <img src="/img/logo.svg" alt="" width="36" height="36" />
+          <span>RUTUBE BOOST</span>
+        </div>
+        <div class="land-meta">
+          <span class="rec-pill"><i></i> ON AIR</span>
+          <span class="mono" id="land-clock">00:00:00</span>
+          <span class="mono">1 : 3</span>
+          <span class="mono" id="land-stats"></span>
+        </div>
+      </header>
+
+      <div class="land-grid">
+        <div class="land-copy">
+          <p class="eyebrow">Сообщество игроков · rutube.ru</p>
+          <h1>
+            <span>RUTUBE</span>
+            <span class="h-boost">BOOST</span>
+          </h1>
+          <p class="lede">
+            Живые люди смотрят ролики от 20 секунд, ставят лайки, пишут комментарии
+            и подписываются на каналы. Чтобы поставить своё в эфир — сначала
+            отработай три чужих.
+          </p>
+
+          <ol class="steps">
+            <li>
+              <b>01</b>
+              <div>
+                <strong>Смотри · лайкай · пиши · подписывайся</strong>
+                <span>Четыре очереди. Каждая живёт отдельно.</span>
+              </div>
+            </li>
+            <li>
+              <b>02</b>
+              <div>
+                <strong>Три чужих действия</strong>
+                <span>Просмотры, лайки, комментарии или подписки — на выбор.</span>
+              </div>
+            </li>
+            <li>
+              <b>03</b>
+              <div>
+                <strong>Одно своё в эфир</strong>
+                <span>Публикуется по ссылке на видео rutube.ru.</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <aside class="land-side">
+          <figure class="poster">
+            <img src="/img/hero-poster.png" alt="Конструктивистский постер эфира" />
+            <figcaption>Живой эфир · без накруток ботами</figcaption>
+          </figure>
+
+          <form id="auth-form" class="auth-card" autocomplete="on">
+            <div class="auth-tabs" role="tablist">
+              <button type="button" class="on" data-mode="login" role="tab">Войти</button>
+              <button type="button" data-mode="register" role="tab">Создать игрока</button>
+            </div>
+            <label>
+              Ник
+              <input name="nick" maxlength="20" required placeholder="Как тебя зовут в эфире" />
+            </label>
+            <label>
+              Пароль
+              <input name="password" type="password" minlength="4" required placeholder="От 4 символов" />
+            </label>
+            <p class="auth-err" id="auth-err" hidden></p>
+            <button class="btn-red" type="submit" id="auth-submit">Войти в студию</button>
+            <p class="fine">Неофициальное сообщество. RUTUBE к сервису не относится.</p>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <div id="studio" class="studio" hidden>
+      <header class="topbar">
+        <div class="brand-lock">
+          <img src="/img/logo.svg" alt="" width="32" height="32" />
+          <div>
+            <strong>RUTUBE BOOST</strong>
+            <em id="rank-label">Стажёр</em>
+          </div>
+        </div>
+
+        <nav class="cats" id="cats">
+          <button data-cat="views" class="on">
+            <span>Просмотры</span>
+            <b id="q-views">0</b>
+          </button>
+          <button data-cat="likes">
+            <span>Лайки</span>
+            <b id="q-likes">0</b>
+          </button>
+          <button data-cat="comments">
+            <span>Комментарии</span>
+            <b id="q-comments">0</b>
+          </button>
+          <button data-cat="subs">
+            <span>Подписки</span>
+            <b id="q-subs">0</b>
+          </button>
+        </nav>
+
+        <div class="top-right">
+          <div class="meter" id="meter">
+            <span class="meter-kicker" id="meter-kicker">до эфира</span>
+            <div class="dots" id="dots"><i></i><i></i><i></i></div>
+            <b id="meter-num">0/3</b>
+          </div>
+          <button class="btn-red" id="btn-publish" type="button">В эфир</button>
+          <button class="icon-btn" id="btn-mine" type="button" title="Мои ролики">Мои</button>
+          <button class="icon-btn" id="btn-rules" type="button" title="Правила">Правила</button>
+          <button class="icon-btn chat-toggle" id="btn-chat" type="button">Чат</button>
+          <div class="who">
+            <span id="who-nick">—</span>
+            <button type="button" id="btn-out">Выйти</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="desk">
+        <main class="stage">
+          <div class="ticker" id="ticker" aria-label="Лента эфира"></div>
+
+          <section class="task" id="task-wrap">
+            <div class="task-head">
+              <div>
+                <p class="kicker" id="task-kicker">Категория · просмотры</p>
+                <h2 id="task-title">Загрузка эфира…</h2>
+                <p class="byline">
+                  <span id="task-author">—</span>
+                  <span class="sep">·</span>
+                  <span id="task-owner">Студия</span>
+                </p>
+              </div>
+              <div class="task-tools">
+                <a id="task-open" class="btn-ghost" href="#" target="_blank" rel="noopener">Открыть на Rutube</a>
+                <button type="button" class="btn-ghost" id="btn-skip">Другой ролик</button>
+              </div>
+            </div>
+
+            <div class="player-frame" id="player-frame">
+              <div class="rec-flag" id="rec-flag" hidden><i></i> REC 20s</div>
+              <div id="player-slot" class="player-slot"></div>
+              <div class="watch-bar">
+                <div id="watch-fill"></div>
+              </div>
+            </div>
+
+            <div class="action-dock" id="action-dock"></div>
+          </section>
+
+          <section class="empty" id="empty" hidden>
+            <p class="kicker">Очередь</p>
+            <h2>В этой категории пока тихо</h2>
+            <p>Все ролики ты уже отработал — или эфир пуст. Опубликуй своё после трёх действий, либо зайди позже.</p>
+            <button type="button" class="btn-red" id="empty-publish">Опубликовать своё</button>
+          </section>
+        </main>
+
+        <aside class="chat" id="chat-panel">
+          <header class="chat-head">
+            <div>
+              <span class="rec-pill sm"><i></i> LIVE</span>
+              <strong>Чат эфира</strong>
+            </div>
+            <span class="mono" id="online-count">0 онлайн</span>
+          </header>
+          <ul class="online" id="online-list"></ul>
+          <div class="chat-log" id="chat-log"></div>
+          <form class="chat-form" id="chat-form">
+            <input id="chat-input" maxlength="300" placeholder="Написать в эфир…" autocomplete="off" />
+            <button type="submit" aria-label="Отправить">↑</button>
+          </form>
+          <div class="leaders">
+            <p class="kicker">Доска игроков</p>
+            <ol id="leaders"></ol>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay-publish" hidden>
+      <div class="sheet">
+        <header>
+          <p class="kicker">Заявка на эфир</p>
+          <h2>1 своё через 3 чужих</h2>
+          <button type="button" class="x" data-close>×</button>
+        </header>
+        <form id="publish-form">
+          <label>
+            Категория
+            <select name="category" id="pub-cat">
+              <option value="views">Просмотры · смотрят от 20 сек</option>
+              <option value="likes">Лайки</option>
+              <option value="comments">Комментарии</option>
+              <option value="subs">Подписки на канал</option>
+            </select>
+          </label>
+          <label>
+            Ссылка на rutube.ru
+            <input name="url" id="pub-url" required placeholder="https://rutube.ru/video/…" />
+          </label>
+          <label>
+            Название (если Rutube не отдаст)
+            <input name="title" id="pub-title" maxlength="120" placeholder="Как подписать ролик в очереди" />
+          </label>
+          <div class="preview" id="pub-preview" hidden></div>
+          <p class="cost" id="pub-cost">Стоимость: 3 действия в этой категории</p>
+          <p class="auth-err" id="pub-err" hidden></p>
+          <button class="btn-red" type="submit">Отправить в эфир</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay-mine" hidden>
+      <div class="sheet wide">
+        <header>
+          <p class="kicker">Твои ролики</p>
+          <h2>Что крутится в эфире</h2>
+          <button type="button" class="x" data-close>×</button>
+        </header>
+        <div id="mine-list" class="mine-list"></div>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay-rules" hidden>
+      <div class="sheet">
+        <header>
+          <p class="kicker">Правила студии</p>
+          <h2>Как устроен Boost</h2>
+          <button type="button" class="x" data-close>×</button>
+        </header>
+        <div class="rules-body">
+          <p>Это обмен живыми действиями. Ботов нет — только игроки.</p>
+          <ul>
+            <li><b>Просмотры.</b> Смотри ролик не меньше 20 секунд, не сворачивая вкладку.</li>
+            <li><b>Лайки.</b> Открой видео на rutube.ru, поставь лайк, подтверди.</li>
+            <li><b>Комментарии.</b> Напиши текст, скопируй под ролик на Rutube, подтверди.</li>
+            <li><b>Подписки.</b> Открой канал и нажми «Подписаться».</li>
+          </ul>
+          <p>Категории разделены. Три просмотра открывают эфир на просмотры. Три лайка — на лайки. И так далее.</p>
+          <p><b>1 своё через 3 чужих.</b> Публикация стоит 3 засчитанных действия той же категории. Ссылка — только rutube.ru.</p>
+          <p>Свои ролики не засчитываются. Один игрок — одно действие на ролик. В студии живой чат: будь человеком.</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
